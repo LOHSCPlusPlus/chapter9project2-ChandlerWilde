@@ -37,13 +37,12 @@ cereal::cereal(){
 void readCerealData(ifstream &cerealFile, int start, int end, cereal Cerealz[999]);
 void printcereal(cereal Cerealz[999], int start, int end);
 void resetCereal(cereal Cerealz[999], int index);
+void outputCereal(ostream &cerealOut, cereal Cerealz[999]);
 
 void addCereal(cereal Cerealz[999]);
 void removeCereal(cereal Cerealz[999]);
 void searchBySugar(cereal Cerealz[999]);
 void reload(cereal Cerealz[999]);
-void printArrayToFile(const char fileName[], cereal Cerealz[]);
-
 
 
 int readInt(const char prompt[]);
@@ -53,6 +52,7 @@ double readDouble(const char prompt[]);
 //Main is kindoff also my menu
 //Main initialized all of my variables and gives you the menu loop
 int main() {
+    ofstream cerealOut("cerealOut.txt");
     ifstream cerealFile("cereal.txt");
     cereal Cerealz[999];
 
@@ -76,10 +76,7 @@ int main() {
         if(choice == 1){
             if(loaded == false){
                     readCerealData(cerealFile, 0, 999, Cerealz);
-            }else{
-                reload(Cerealz); 
-                readCerealData(cerealFile, 0, 200);
-                }
+            }else{ reload(Cerealz); }
         }
         
         if(choice == 2){
@@ -102,12 +99,8 @@ int main() {
         
         if(choice == 5){
 
-            cout << "Enter the name of the File: ";
-            char fileName[10];
-            cin >> fileName;
+            outputCereal(cerealOut, Cerealz);
 
-            printArrayToFile(fileName, Cerealz);
-            
         }
         
         if(choice == 6){
@@ -131,22 +124,21 @@ int main() {
 
 
 //Output cereal saves all of the info to a file
-void printArrayToFile(const char fileName[10], cereal Cerealz[]) {
-    ofstream outFile(fileName);
-    for (int index = 0; index < Cerealz[0].arrLen; index++) {
+void outputCereal(ostream &cerealOut, cereal Cerealz[999]){
 
-            outFile << Cerealz[index].name << ";";
-            outFile << Cerealz[index].caleries << ";";
-            outFile << Cerealz[index].GramsOfFat << ";";
-            outFile << Cerealz[index].GramsOfSodium << ";";
-            outFile << Cerealz[index].GramsOfCarbohydrate << ";";
-            outFile << Cerealz[index].GramsOfSugar << ";";
-            outFile << Cerealz[index].CupsPerServing << ";";
+    for(int index = 0; index < Cerealz[0].arrLen; index++){
+
+        cerealOut << Cerealz[index].name << ";";
+        cerealOut << Cerealz[index].caleries << ";";
+        cerealOut << Cerealz[index].GramsOfFat << ";";
+        cerealOut << Cerealz[index].GramsOfSodium << ";";
+        cerealOut << Cerealz[index].GramsOfCarbohydrate << ";";
+        cerealOut << Cerealz[index].GramsOfSugar << ";";
+        cerealOut << Cerealz[index].CupsPerServing << ";\n";
         
     }
+    
 }
-
-
 
 //reload deletes and reloads my cereal varaible
 void reload(cereal Cerealz[999]){
